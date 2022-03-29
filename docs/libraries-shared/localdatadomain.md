@@ -7,6 +7,50 @@ nav_order: 1
 
 # LocalDataDomain
 
+## Quickstart
+
+If you don't want to know more about the specifics then you can see a quickstart here.
+The PlayerData should obviously an external class instead.
+```java
+public class PlayerDataManager {
+
+    private final LocalDataDomain<UUID, PlayerData> playerDataDomain;
+
+    public PlayerDataManager(Libraries libraries) {
+        MongoDatabase database = libraries.getMongoClient().getDatabase("playerdata");
+        DomainContext<UUID, PlayerData> context = DomainContext.<UUID, PlayerData>builder()
+                .namespace("local-player-data")
+                .redissonClient(libraries.getRedissonClient())
+                .keyClass(UUID.class)
+                .valueClass(PlayerData.class)
+                .creator(PlayerData::new)
+                .keyFunction(PlayerData::getPlayerID)
+                .mongoDatabase(database)
+                .build();
+        this.playerDataDomain = DataManager.getInstance().getOrCreateLocalDomain(context);
+    }
+
+    public void onPlayerConnect(UUID playerID) {
+        this.playerDataDomain.loadDataSync(playerID);
+    }
+
+    public void onDisconnect(UUID playerID) {
+        this.playerDataDomain.unloadDataAsync(playerID);
+    }
+
+    public PlayerData getPlayerData(Player player) {
+        return this.playerDataDomain.getData(player.getUniqueId());
+    }
+
+    @Data
+    @RequiredArgsConstructor
+    public static class PlayerData {
+        private final UUID playerID;
+        private final Map<String, String> someStuff = new HashMap<>();
+    }
+}
+```
+
 ## Preparation
 
 First you should make sure that `Libraries` was initialized at some point and that you have an instance
