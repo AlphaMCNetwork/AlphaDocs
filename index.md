@@ -1,4 +1,11 @@
-## Welcome to GitHub Pages
+---
+layout: default
+title: Home
+nav_order: 1
+permalink: /
+---
+
+## Home
 
 You can use the [editor on GitHub](https://github.com/AlphaMCNetwork/AlphaDocs/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
