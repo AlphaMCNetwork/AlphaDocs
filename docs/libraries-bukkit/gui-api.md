@@ -14,13 +14,13 @@ Creating a Menu is pretty simply. All you have to do is extend `Menu`:
 public class SomeMenu extends Menu {
 
     @Override
-    protected Inventory createEmptyInventory(Player player) {
+    protected Inventory createEmptyInventory(HumanEntity player) {
         String invName = "Hi %s".formatted(player.getName());
         return Bukkit.createInventory(null, 3 * 9, invName);
     }
 
     @Override
-    protected void setup() {
+    protected void setup(HumanEntity player) {
         // Will be called in the constructor
     }
 
@@ -81,13 +81,13 @@ We can optionally overwrite 4 methods to gain more control over the menu:
 public class SomeMenu extends Menu {
 
     @Override
-    protected Inventory createEmptyInventory(Player player) {
+    protected Inventory createEmptyInventory(HumanEntity player) {
         String invName = "Hi %s".formatted(player.getName());
         return Bukkit.createInventory(null, 3 * 9, invName);
     }
 
     @Override
-    protected void setup() {
+    protected void setup(HumanEntity player) {
 
     }
 
